@@ -1,4 +1,4 @@
-from typing import Tuple, cast
+from typing import Tuple, cast, Dict
 
 from .shared.models import User, Session
 from .logic.users_logic import UsersLogic
@@ -38,3 +38,19 @@ def update(user: User, token: str) -> User:
         transaction.commit()
 
     return updated_user
+
+
+def forgot_password(username: str) -> str:
+    with Transaction(allow_no_token=True) as transaction:
+        logic = UsersLogic(transaction)
+        token = logic.forgot_password(username)
+        transaction.commit()
+
+    return token
+
+
+def change_password(data: Dict[str, int]) -> None:
+    with Transaction(allow_no_token=True) as transaction:
+        logic = UsersLogic(transaction)
+        logic.change_password(data)
+        transaction.commit()

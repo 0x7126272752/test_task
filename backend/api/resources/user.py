@@ -19,8 +19,7 @@ class User(MethodView):
             schema = UserSchema()
             user_dict: dict = cast(dict, schema.dump(user))
 
-            return success_response(data=user_dict,
-                                    convert_keys_to_camel=True)
+            return success_response(data=user_dict, convert_keys_to_camel=True)
 
         except Exception as e:
             return error_reponse(e)
@@ -32,15 +31,14 @@ class User(MethodView):
             if not request.is_json:
                 raise Exception("Request is not JSON")
             json_data = request.data.decode("utf-8")
-            print(json_data)
+
             schema = UserSchema(external_casing=Casing.CAMEL)
             user: UserClass = cast(UserClass, schema.loads(json_data))
             updated_user = update(user, token)
             schema = UserSchema()
             updated_user_dict: dict = cast(dict, schema.dump(updated_user))
 
-            return success_response(data=updated_user_dict,
-                                    convert_keys_to_camel=True)
+            return success_response(data=updated_user_dict, convert_keys_to_camel=True)
 
         except Exception as e:
             return error_reponse(e)

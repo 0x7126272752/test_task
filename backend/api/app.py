@@ -6,6 +6,7 @@ from .resources.logout import Logout
 from .resources.session import Session
 from .resources.signup import Signup
 from .resources.user import User
+from .resources.forgot_password import ForgotPassword
 
 _ROOT_PATH = "/jr-interview/v2/"
 
@@ -32,6 +33,12 @@ def create_app():
 
     app.add_url_rule(
         f"{_ROOT_PATH}user", view_func=User.as_view("user"), methods=["GET", "PUT"]
+    )
+
+    app.add_url_rule(
+        f"{_ROOT_PATH}forgot_password",
+        view_func=ForgotPassword.as_view("forgot_password"),
+        methods=["POST", "PUT"],
     )
 
     return app

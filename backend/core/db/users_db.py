@@ -13,7 +13,7 @@ class UsersDB:
     def get_by_username(self, username: str) -> Union[User, None]:
         query = (
             "SELECT user_id, username, first_name, last_name, "
-            "fav_color, password "
+            "fav_color, password, city "
             "FROM users "
             "WHERE username = ?"
         )
@@ -73,7 +73,7 @@ class UsersDB:
         query = (
             "UPDATE users "
             "SET username = ?, first_name = ?, last_name = ?, "
-            "fav_color = ? "
+            "fav_color = ?, city = ? "
             "WHERE user_id = ?"
         )
         cursor = self.transaction.cursor()
@@ -84,8 +84,19 @@ class UsersDB:
                 user.first_name,
                 user.last_name,
                 user.fav_color,
+                user.city,
                 user.user_id,
             ),
+        )
+
+        cursor.close()
+
+    def update_password(self, user_id: int, password: str) -> None:
+        query = "UPDATE users SET password = ? WHERE user_id = ?"
+        cursor = self.transaction.cursor()
+        cursor.execute(
+            query,
+            (password, user_id),
         )
 
         cursor.close()

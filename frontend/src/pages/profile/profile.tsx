@@ -104,6 +104,7 @@ export const Profile = (): JSX.Element => {
                     firstName: updatedUser.firstName,
                     lastName: updatedUser.lastName,
                     username: updatedUser.username,
+                    city: updatedUser.city,
                 });
             }
             setUser(updatedUser);
@@ -215,6 +216,24 @@ export const Profile = (): JSX.Element => {
                                         setUser({
                                             ...user,
                                             username: event.target.value,
+                                        });
+                                    }}
+                                />
+                                 <TextField
+                                    value={user.city}
+                                    label="City *"
+                                    error={errors.city ? true : false}
+                                    helperText={errors.city || " "}
+                                    InputProps={{
+                                        readOnly: working,
+                                    }}
+                                    onChange={(event) => {
+                                        if (errors.city) {
+                                            setErrors({ ...errors, city: "" });
+                                        }
+                                        setUser({
+                                            ...user,
+                                            city: event.target.value,
                                         });
                                     }}
                                 />

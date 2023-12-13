@@ -5,6 +5,9 @@ import toml
 _CONFIG_FILE = "./task2.conf"
 _loaded = False
 
+SECRET_KEY = "oLWf-bagla2a;vfqWpfa"
+HASH_ALGORITHM = "HS256"
+
 
 class ConfigSchema(Schema):
     db_path = fields.String(required=True)
@@ -17,8 +20,12 @@ class ConfigSchema(Schema):
 
 
 class Config:
-    def __init__(self, db_path: str = "", token_length: int = 64,
-                 session_timeout_seconds: int = 86400):
+    def __init__(
+        self,
+        db_path: str = "",
+        token_length: int = 64,
+        session_timeout_seconds: int = 86400,
+    ):
         self.db_path = db_path
         self.token_length = token_length
         self.session_timeout_seconds = session_timeout_seconds

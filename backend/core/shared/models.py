@@ -78,3 +78,28 @@ class Session:
         self.session_id = session_id
         self.user_id = user_id
         self.token = token
+
+
+class ResetPasswordSchema(ModelSchema):
+    user_id = fields.Integer(required=True)
+    token = fields.String(required=True)
+    expiration_time = fields.Integer(required=True)
+    used = fields.Boolean(required=False)
+
+    @post_load
+    def make_session(self, data, **kwargs):
+        return ResetPassword(**data)
+
+
+class ResetPassword:
+    def __init__(
+        self,
+        user_id: Union[int, None] = None,
+        token: Union[str, None] = None,
+        expiration_time: Union[int, None] = None,
+        used: Union[int, None] = None,
+    ):
+        self.expiration_time = expiration_time
+        self.user_id = user_id
+        self.token = token
+        self.used = used

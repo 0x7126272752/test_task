@@ -1,4 +1,7 @@
-from typing import TYPE_CHECKING, Tuple
+import jwt
+from datetime import datetime, timedelta
+from secrets import token_urlsafe
+from typing import TYPE_CHECKING, Tuple, Dict
 from copy import copy
 
 if TYPE_CHECKING:
@@ -7,12 +10,15 @@ if TYPE_CHECKING:
 from .sessions_logic import SessionsLogic
 from ..shared.models import User, Session
 from ..db.users_db import UsersDB
+from ..db.reset_password_db import ResetPasswordDB
+from ..shared.config import SECRET_KEY, HASH_ALGORITHM, CONFIG
 
 
 class UsersLogic:
     def __init__(self, transaction: "Transaction"):
         self.transaction = transaction
         self.db: UsersDB = UsersDB(transaction)
+        self.reset_password: ResetPasswordDB = ResetPasswordDB(transaction)
 
     def add(self, user: User) -> Tuple[User, Session]:
         new_user = copy(user)
@@ -51,3 +57,45 @@ class UsersLogic:
         self.transaction.current_session = session
 
         return user, session
+
+    def forgot_password(self, username: str) -> Dict[str, int]:
+        data = {}
+
+        user = self.db.get_by_username(username)
+        if not user:
+            raise Exception("Username is not found")
+
+        token = token_urlsafe(CONFIG.token_length)
+        expiration_time = int(
+            datetime.timestamp(datetime.now() + timedelta(minutes=15))
+        )
+
+        data["user_id"] = user.user_id
+        data["expiration_time"] = expiration_time
+        data["token"] = token
+        self.reset_password.add(data)
+
+        return token
+
+    def change_password(self, data: dict) -> None:
+        try:
+            if data["password"] != data["confirmPassword"]:
+                raise Exception("Passwords mismatch")
+
+            if not (data["password"] and data["confirmPassword"]):
+                raise Exception("Password missed")
+
+            token_data = self.reset_password.get(token=data["token"])
+
+            if token_data.used:
+                raise Exception("Token is already used")
+
+            current_time = datetime.timestamp(datetime.now())
+            if current_time > token_data.expiration_time:
+                raise Exception("Token is expired")
+
+            self.db.update_password(token_data.user_id, data["password"])
+            self.reset_password.mark_as_used(token_data.token)
+
+        except:
+            raise Exception("Token is not valid")

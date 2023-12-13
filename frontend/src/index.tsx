@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { Login, UserHome, Signup, Profile } from "pages";
+import { Login, UserHome, Signup, Profile, ForgotPassword, ResetPassword } from "pages";
 import { SessionProvider } from "providers";
 
 const root = ReactDOM.createRoot(
@@ -18,9 +18,10 @@ root.render(
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/user" element={<UserHome />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset" element={<ResetPassword/>} />
                 </Routes>
             </BrowserRouter>
-        </SessionProvider>
+        </SessionProvider>  
     </React.StrictMode>
 );
-

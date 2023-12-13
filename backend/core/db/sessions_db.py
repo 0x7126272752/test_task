@@ -1,5 +1,5 @@
-from typing import TYPE_CHECKING, Union, cast
 from hashlib import sha256
+from typing import TYPE_CHECKING, Union, cast
 
 if TYPE_CHECKING:
     from ..shared.transaction import Transaction

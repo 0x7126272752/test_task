@@ -176,6 +176,11 @@ export const Login = (): JSX.Element => {
                                     Signup!
                                 </Link>
                             </Typography>
+                            <Typography>
+                                <Link to={`${appConfig.rootPath}forgot-password`}>
+                                    Forgot password?
+                                </Link>
+                            </Typography>
                         </div>
                     </Stack>
                 </form>

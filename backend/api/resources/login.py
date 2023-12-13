@@ -24,14 +24,14 @@ class Login(MethodView):
             data = cast(dict[str, str], schema.loads(json_data))
             user, session = login(data["username"], data["password"])
 
-            response = success_response(
-                data=session_data_dict(user, session))
+            response = success_response(data=session_data_dict(user, session))
 
             response.set_cookie(
                 "sessionToken",
                 cast(str, session.token),
                 httponly=True,
-                max_age=CONFIG.session_timeout_seconds)
+                max_age=CONFIG.session_timeout_seconds,
+            )
 
             return response
 
