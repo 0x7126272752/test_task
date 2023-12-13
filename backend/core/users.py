@@ -26,8 +26,7 @@ def login(username: str, password: str) -> Tuple[User, Session]:
 def get(token: str) -> User:
     with Transaction(session_token=token) as transaction:
         logic = UsersLogic(transaction)
-        user = logic.get(
-            cast(int, cast(User, transaction.current_user).user_id))
+        user = logic.get(cast(int, cast(User, transaction.current_user).user_id))
 
     return user
 
@@ -36,5 +35,6 @@ def update(user: User, token: str) -> User:
     with Transaction(session_token=token) as transaction:
         logic = UsersLogic(transaction)
         updated_user = logic.update(user)
+        transaction.commit()
 
     return updated_user

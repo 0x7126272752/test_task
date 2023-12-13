@@ -6,15 +6,17 @@ if TYPE_CHECKING:
 from ..shared.models import User, UserSchema
 
 
-class UsersDB():
+class UsersDB:
     def __init__(self, transaction: "Transaction"):
         self.transaction = transaction
 
     def get_by_username(self, username: str) -> Union[User, None]:
-        query = ("SELECT user_id, username, first_name, last_name, "
-                 "fav_color "
-                 "FROM users "
-                 "WHERE username = ?")
+        query = (
+            "SELECT user_id, username, first_name, last_name, "
+            "fav_color, password "
+            "FROM users "
+            "WHERE username = ?"
+        )
 
         cursor = self.transaction.cursor()
         cursor.execute(query, (username,))
@@ -28,9 +30,11 @@ class UsersDB():
         return None
 
     def get(self, user_id: int) -> Union[User, None]:
-        query = ("SELECT user_id, username, first_name, last_name, fav_color "
-                 "FROM users "
-                 "WHERE user_id = ?")
+        query = (
+            "SELECT user_id, username, first_name, last_name, fav_color "
+            "FROM users "
+            "WHERE user_id = ?"
+        )
 
         cursor = self.transaction.cursor()
         cursor.execute(query, (user_id,))
@@ -44,27 +48,43 @@ class UsersDB():
         return None
 
     def add(self, user: User):
-        query = ("INSERT INTO users (username, first_name, last_name, "
-                 "password, fav_color "
-                 "VALUES (?, ?, ?, ?, ?)")
+        query = (
+            "INSERT INTO users (username, first_name, last_name, "
+            "password, fav_color)"
+            "VALUES (?, ?, ?, ?, ?)"
+        )
         cursor = self.transaction.cursor()
         cursor.execute(
             query,
-            (user.username, user.first_name, user.last_name, user.password,
-             user.fav_color))
+            (
+                user.username,
+                user.first_name,
+                user.last_name,
+                user.password,
+                user.fav_color,
+            ),
+        )
         if cursor.lastrowid is not None:
             user.user_id = cursor.lastrowid
         cursor.close()
 
     def update(self, user: User):
-        query = ("UPDATE users "
-                 "SET username = ?, first_name = ?, last_name = ?, "
-                 "fav_colour = ? "
-                 "WHERE user_id = ?")
+        query = (
+            "UPDATE users "
+            "SET username = ?, first_name = ?, last_name = ?, "
+            "fav_color = ? "
+            "WHERE user_id = ?"
+        )
         cursor = self.transaction.cursor()
         cursor.execute(
             query,
-            (user.username, user.first_name, user.last_name, user.fav_color,
-             user.user_id))
+            (
+                user.username,
+                user.first_name,
+                user.last_name,
+                user.fav_color,
+                user.user_id,
+            ),
+        )
 
         cursor.close()

@@ -10,7 +10,7 @@ from ..shared.config import CONFIG
 from ..db.sessions_db import SessionsDB
 
 
-class SessionsLogic():
+class SessionsLogic:
     def __init__(self, transaction: "Transaction"):
         self.transaction = transaction
         self.db = SessionsDB(transaction)

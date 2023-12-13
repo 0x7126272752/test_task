@@ -12,26 +12,26 @@ _ROOT_PATH = "/jr-interview/v2/"
 
 def create_app():
     app = Flask(__name__.split(".")[0], root_path="..")
-    CORS(app, supports_credentials=True)
+    CORS(app, supports_credentials=True, origins=["http://127.0.0.1:3000"])
 
-    app.add_url_rule(f"{_ROOT_PATH}login",
-                     view_func=Login.as_view("login"),
-                     methods=["POST"])
+    app.add_url_rule(
+        f"{_ROOT_PATH}login", view_func=Login.as_view("login"), methods=["POST"]
+    )
 
-    app.add_url_rule(f"{_ROOT_PATH}logout",
-                     view_func=Logout.as_view("logout"),
-                     methods=["POST"])
+    app.add_url_rule(
+        f"{_ROOT_PATH}logout", view_func=Logout.as_view("logout"), methods=["POST"]
+    )
 
-    app.add_url_rule(f"{_ROOT_PATH}session",
-                     view_func=Session.as_view("session"),
-                     methods=["GET"])
+    app.add_url_rule(
+        f"{_ROOT_PATH}session", view_func=Session.as_view("session"), methods=["GET"]
+    )
 
-    app.add_url_rule(f"{_ROOT_PATH}signup",
-                     view_func=Signup.as_view("signup"),
-                     methods=["POST"])
+    app.add_url_rule(
+        f"{_ROOT_PATH}signup", view_func=Signup.as_view("signup"), methods=["POST"]
+    )
 
-    app.add_url_rule(f"{_ROOT_PATH}user",
-                     view_func=User.as_view("user"),
-                     methods=["GET", "PUT"])
+    app.add_url_rule(
+        f"{_ROOT_PATH}user", view_func=User.as_view("user"), methods=["GET", "PUT"]
+    )
 
     return app
