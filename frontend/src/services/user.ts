@@ -9,7 +9,7 @@ export function userGet(
     onAbort?: () => void
 ): AbortController {
     return get<User>(
-        `/user`,
+        `${appConfig.apiUrl}user`,
         appConfig.apiTimeoutSeconds,
         undefined,
         onSuccess,
@@ -27,7 +27,7 @@ export function userUpdate(
     onAbort?: () => void
 ): AbortController {
     return put<User>(
-        `/user`,
+        `${appConfig.apiUrl}user`,
         appConfig.apiTimeoutSeconds,
         user,
         undefined,

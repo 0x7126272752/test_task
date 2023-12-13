@@ -10,7 +10,7 @@ export function signup(
     onAbort?: () => void
 ): AbortController {
     return post<SessionData>(
-        `${appConfig.apiUrl}sinup`,
+        `${appConfig.apiUrl}signup`,
         appConfig.apiTimeoutSeconds,
         user,
         undefined,

@@ -11,6 +11,7 @@ import { userGet, userUpdate } from "services";
 import { SessionContext } from "contexts";
 
 import styles from "./profile.module.css";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = (): JSX.Element => {
     const [user, setUser] = useState<User | null>(null);
@@ -27,6 +28,7 @@ export const Profile = (): JSX.Element => {
     const session = useContext(SessionContext);
     const loadAC = useRef<AbortController | null>(null);
     const saveAC = useRef<AbortController | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const onSuccess = (user: User): void => {
@@ -110,6 +112,7 @@ export const Profile = (): JSX.Element => {
                     setToastProps(null);
                 },
             });
+            navigate("/user");
         };
 
         const onError = (error: string | undefined): void => {
