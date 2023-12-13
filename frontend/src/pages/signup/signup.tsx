@@ -22,6 +22,7 @@ export const Signup = (): JSX.Element => {
         username: "",
         password: "",
         favColor: "",
+        city: "",
     });
     const [errors, setErrors] = useState<User>({
         firstName: "",
@@ -29,6 +30,7 @@ export const Signup = (): JSX.Element => {
         username: "",
         password: "",
         favColor: "",
+        city: "",
     });
     const [working, setWorking] = useState<boolean>(false);
     const [toastProps, setToastProps] = useState<ToastPropsData | null>(null);
@@ -53,6 +55,7 @@ export const Signup = (): JSX.Element => {
             favColor: "",
             username: "",
             password: "",
+            city: "",
         };
 
         if (!user.firstName) {
@@ -75,12 +78,17 @@ export const Signup = (): JSX.Element => {
             currentErrors.password = "Password is required";
         }
 
+        if (!user.city) {
+            currentErrors.city = "City is required";
+        }
+
         if (
             currentErrors.firstName ||
             currentErrors.lastName ||
             currentErrors.favColor ||
             currentErrors.username ||
-            currentErrors.password
+            currentErrors.password ||
+            currentErrors.city
         ) {
             setErrors(currentErrors);
             return;
@@ -210,6 +218,24 @@ export const Signup = (): JSX.Element => {
                                 setUser({
                                     ...user,
                                     password: event.target.value,
+                                });
+                            }}
+                        />
+                        <TextField
+                            value={user.city}
+                            label="City *"
+                            error={errors.city ? true : false}
+                            helperText={errors.city || " "}
+                            InputProps={{
+                                readOnly: working,
+                            }}
+                            onChange={(event) => {
+                                if (errors.city) {
+                                    setErrors({ ...errors, city: "" });
+                                }
+                                setUser({
+                                    ...user,
+                                    city: event.target.value,
                                 });
                             }}
                         />

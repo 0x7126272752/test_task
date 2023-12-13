@@ -22,6 +22,7 @@ export const Profile = (): JSX.Element => {
         lastName: "",
         username: "",
         favColor: "",
+        city: "",
     });
     const [working, setWorking] = useState<boolean>(false);
     const [toastProps, setToastProps] = useState<ToastPropsData | null>(null);
@@ -63,6 +64,7 @@ export const Profile = (): JSX.Element => {
             lastName: "",
             favColor: "",
             username: "",
+            city: "",
         };
 
         if (!user?.firstName) {

@@ -9,7 +9,7 @@ from ..shared.models import User, Session
 from ..db.users_db import UsersDB
 
 
-class UsersLogic():
+class UsersLogic:
     def __init__(self, transaction: "Transaction"):
         self.transaction = transaction
         self.db: UsersDB = UsersDB(transaction)

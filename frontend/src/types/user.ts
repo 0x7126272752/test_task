@@ -5,4 +5,5 @@ export interface User {
     lastName: string;
     favColor: string;
     password?: string;
+    city: string;
 }

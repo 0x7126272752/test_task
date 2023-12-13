@@ -31,7 +31,7 @@ class UsersDB:
 
     def get(self, user_id: int) -> Union[User, None]:
         query = (
-            "SELECT user_id, username, first_name, last_name, fav_color "
+            "SELECT user_id, username, first_name, last_name, fav_color, city "
             "FROM users "
             "WHERE user_id = ?"
         )
@@ -50,8 +50,8 @@ class UsersDB:
     def add(self, user: User):
         query = (
             "INSERT INTO users (username, first_name, last_name, "
-            "password, fav_color)"
-            "VALUES (?, ?, ?, ?, ?)"
+            "password, fav_color, city)"
+            "VALUES (?, ?, ?, ?, ?, ?)"
         )
         cursor = self.transaction.cursor()
         cursor.execute(
@@ -62,6 +62,7 @@ class UsersDB:
                 user.last_name,
                 user.password,
                 user.fav_color,
+                user.city,
             ),
         )
         if cursor.lastrowid is not None:

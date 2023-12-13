@@ -34,7 +34,7 @@ export const UserHome = (): JSX.Element => {
                     </Typography>
                     <Typography variant="h5" align="center">
                         Welcome
-                        {` ${session.sessionData?.firstName} ${session.sessionData?.lastName}`}
+                        {` ${session.sessionData?.firstName} ${session.sessionData?.lastName} ${session.sessionData?.city || "No city"}`}
                     </Typography>
                     <div className={styles.centeredContent}>
                         <Button

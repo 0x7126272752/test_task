@@ -16,6 +16,7 @@ class ModelSchema(Schema):
 
     def on_bind_field(self, field_name, field_obj):
         if self.external_casing == Casing.CAMEL:
+
             def camelcase(s):
                 parts = iter(s.split("_"))
                 return next(parts) + "".join(i.title() for i in parts)
@@ -28,30 +29,33 @@ class UserSchema(ModelSchema):
     username = fields.String(required=True, validate=validate.Length(1))
     first_name = fields.String(required=True, validate=validate.Length(1))
     last_name = fields.String(required=True, validate=validate.Length(1))
-    password = fields.String(required=False, missing=None,
-                             validate=validate.Length(1))
+    password = fields.String(required=False, missing=None, validate=validate.Length(1))
     fav_color = fields.String(required=True, validate=validate.Length(1))
+    city = fields.String(required=False, validate=validate.Length(1))
 
     @post_load
     def make_user(self, data: dict, **kwargs):
         return User(**data)
 
 
-class User():
-    def __init__(self,
-                 user_id: Union[int, None] = None,
-                 username: Union[str, None] = None,
-                 first_name: Union[str, None] = None,
-                 last_name: Union[str, None] = None,
-                 password: Union[str, None] = None,
-                 fav_color: Union[str, None] = None,):
-
+class User:
+    def __init__(
+        self,
+        user_id: Union[int, None] = None,
+        username: Union[str, None] = None,
+        first_name: Union[str, None] = None,
+        last_name: Union[str, None] = None,
+        password: Union[str, None] = None,
+        fav_color: Union[str, None] = None,
+        city: Union[str, None] = None,
+    ):
         self.user_id = user_id
         self.username = username
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
         self.fav_color = fav_color
+        self.city = city
 
 
 class SessionSchema(ModelSchema):
@@ -64,12 +68,13 @@ class SessionSchema(ModelSchema):
         return Session(**data)
 
 
-class Session():
-    def __init__(self,
-                 session_id: Union[int, None] = None,
-                 user_id: Union[int, None] = None,
-                 token: Union[str, None] = None):
-
+class Session:
+    def __init__(
+        self,
+        session_id: Union[int, None] = None,
+        user_id: Union[int, None] = None,
+        token: Union[str, None] = None,
+    ):
         self.session_id = session_id
         self.user_id = user_id
         self.token = token

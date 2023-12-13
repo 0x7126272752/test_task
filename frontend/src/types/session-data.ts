@@ -4,4 +4,5 @@ export interface SessionData {
     username: string;
     firstName: string;
     lastName: string;
+    city: string;
 }

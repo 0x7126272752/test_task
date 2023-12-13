@@ -5,15 +5,14 @@ from flask import Response, request
 from core.shared.models import User, Session
 
 
-def session_data_dict(user: User,
-                      session: Session) -> dict[str, Union[int, str, None]]:
-
+def session_data_dict(user: User, session: Session) -> dict[str, Union[int, str, None]]:
     return {
         "sessionId": session.session_id,
         "userId": user.user_id,
         "username": user.username,
         "firstName": user.first_name,
         "lastName": user.last_name,
+        "city": user.city,
     }
 
 
@@ -66,9 +65,9 @@ def item_to_camel(source, return_copy: bool = True):
         return source
 
 
-def success_response(data: Union[dict, None] = None,
-                     convert_keys_to_camel=False) -> Response:
-
+def success_response(
+    data: Union[dict, None] = None, convert_keys_to_camel=False
+) -> Response:
     body: dict[str, Any] = {"result": "success"}
     if data is not None:
         if convert_keys_to_camel:
@@ -76,18 +75,20 @@ def success_response(data: Union[dict, None] = None,
         else:
             body["data"] = data
 
-    return Response(response=json.dumps(body), status=200,
-                    content_type="application/json")
+    return Response(
+        response=json.dumps(body), status=200, content_type="application/json"
+    )
 
 
 def error_reponse(e: Exception) -> Response:
     body: dict[str, str] = {
         "result": "error",
-        "error": str(e.args[0]) if len(e.args) > 0 else "Unknown"
+        "error": str(e.args[0]) if len(e.args) > 0 else "Unknown",
     }
 
-    return Response(response=json.dumps(body), status=400,
-                    content_type="application/json")
+    return Response(
+        response=json.dumps(body), status=400, content_type="application/json"
+    )
 
 
 def get_session_token() -> str:
