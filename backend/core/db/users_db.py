@@ -1,3 +1,4 @@
+from passlib.hash import pbkdf2_sha256
 from typing import TYPE_CHECKING, Union, cast
 
 if TYPE_CHECKING:
@@ -48,6 +49,8 @@ class UsersDB:
         return None
 
     def add(self, user: User):
+        hashed_password = pbkdf2_sha256.hash(user.password)
+
         query = (
             "INSERT INTO users (username, first_name, last_name, "
             "password, fav_color, city)"
@@ -60,7 +63,7 @@ class UsersDB:
                 user.username,
                 user.first_name,
                 user.last_name,
-                user.password,
+                hashed_password,
                 user.fav_color,
                 user.city,
             ),
@@ -92,11 +95,13 @@ class UsersDB:
         cursor.close()
 
     def update_password(self, user_id: int, password: str) -> None:
+        hashed_password = pbkdf2_sha256.hash(password)
+
         query = "UPDATE users SET password = ? WHERE user_id = ?"
         cursor = self.transaction.cursor()
         cursor.execute(
             query,
-            (password, user_id),
+            (hashed_password, user_id),
         )
 
         cursor.close()

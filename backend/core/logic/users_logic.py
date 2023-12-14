@@ -1,4 +1,4 @@
-import jwt
+from passlib.hash import pbkdf2_sha256
 from datetime import datetime, timedelta
 from secrets import token_urlsafe
 from typing import TYPE_CHECKING, Tuple, Dict
@@ -47,7 +47,7 @@ class UsersLogic:
 
     def login(self, username: str, password: str) -> Tuple[User, Session]:
         user = self.db.get_by_username(username)
-        if not user or user.password != password:
+        if not user or not (self._check_password(password, user.password)):
             raise Exception("Username is not found or password is incorrect")
 
         self.transaction.current_user = user
@@ -99,3 +99,7 @@ class UsersLogic:
 
         except:
             raise Exception("Token is not valid")
+
+    @staticmethod
+    def _check_password(password: str, hashed_password: str) -> bool:
+        return pbkdf2_sha256.verify(password, hashed_password)
